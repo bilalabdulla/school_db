@@ -1,0 +1,11 @@
+                                                     class 
+                    ___________________________________________________________________________________ 
+                    |         subjectTeachers          |                                               |
+                    |----------------------------------|-----------------------------------------------|
+                    |                                  |                 subjectEnrollments            |
+                teachers                              students  ----------------------------------  subjects
+
+
+                class hasmany teachers, students, subjects
+                teachers manytomany subjects
+                students manytomany subjects    
