@@ -1,12 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import CustomAPIError from "./custom-api";
 
-
-
 export default class NotFoundError extends CustomAPIError {
-    statusCode: any
+    statusCode: number
 
-    constructor(message: string, statusCode: number) {
+    constructor(message: string) {
         super(message)
         this.statusCode = StatusCodes.NOT_FOUND
     }

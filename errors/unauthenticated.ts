@@ -4,10 +4,11 @@ import CustomAPIError from "./custom-api";
 
 
 export default class UnauthenticatedError extends CustomAPIError {
-    statusCode: any
+    statusCode: number
 
-    constructor(message: any) {
+    constructor(message: string) {
         super(message)
         this.statusCode = StatusCodes.UNAUTHORIZED
+        this.message = message
     }
 }

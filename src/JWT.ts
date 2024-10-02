@@ -34,9 +34,8 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
         const payload = verify(token, 'jwtSecret')
         if (payload) {
             return next()
-        }
+        } 
     } catch (error) {
         return res.status(400).json(error)
     }
-} 
-
+}                                                                                                                                                                                                                        

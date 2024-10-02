@@ -1,4 +1,4 @@
-export interface StudentAttributes {
+export interface StudentDto {
     firstName: string 
     lastName: string,
     grade: number 

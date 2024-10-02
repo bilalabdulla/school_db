@@ -6,4 +6,3 @@ router.route('/').post(createTeachers).get(getTeachers)
 router.route('/:id').get(getTeacher).patch(updateTeacher).delete(deleteTeacher)
 
 export default router 
-

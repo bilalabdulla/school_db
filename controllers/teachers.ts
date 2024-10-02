@@ -2,53 +2,39 @@ import { NextFunction, Request, Response } from "express"
 import { createTeachersService, deleteTeacherService, getTeacherService, getTeachersService, updateTeacherService } from "../services/teachers"
 import { CreateTeacherDto } from "../dtos/createTeacher.dto"
 import { TeacherParams } from "../types/teachers.params"
+import BadRequestError from "../errors/bad-request"
+import { StatusCodes } from "http-status-codes"
 
 
 export const createTeachers = async (req: Request<{}, {}, CreateTeacherDto>, res: Response, next: NextFunction) => {
-    try {
+        const { firstName, lastName } = req.body
+        if (!firstName || !lastName) {
+            throw new BadRequestError('Please provide all details of the teacher')
+        }
         const teacher = await createTeachersService(req.body)
-        res.status(201).json(teacher)
-    } catch (error) {
-        res.status(404).json(error)
-    }
+        res.status(StatusCodes.CREATED).json(teacher)
 }
 
 export const getTeacher = async (req: Request<TeacherParams>, res: Response, next: NextFunction) => {
     const { id } = req.params
-    try {
-        const teacher = await getTeacherService(id)
-        res.status(200).json(teacher)
-    } catch (error) {
-        return next(error)
-    }
+    const teacher = await getTeacherService(id)
+    res.status(StatusCodes.OK).json(teacher)
 }
 
-export const getTeachers = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const teachers = await getTeachersService()
-        res.status(200).json(teachers)
-    } catch (error) {
-        return next(error)
-    }
+export const getTeachers = async (req: Request, res: Response, next: NextFunction) => {  
+    const teachers = await getTeachersService()
+    res.status(StatusCodes.OK).json(teachers)
 }
 
 export const updateTeacher = async (req: Request<TeacherParams, {}, CreateTeacherDto>, res: Response, next: NextFunction) => {
     const { id } = req.params 
     const data = req.body
-    try {
-        const teacher = await updateTeacherService(id, data) 
-        return res.status(201).json(teacher)
-    } catch (error) {
-        return res.status(403).json(error)
-    }
+    const teacher = await updateTeacherService(id, data) 
+    res.status(StatusCodes.CREATED).json(teacher)
 }
 
 export const deleteTeacher = async (req: Request<TeacherParams>, res: Response, next: NextFunction) => {
     const { id } = req.params 
-    try {
-        const teacher = await deleteTeacherService(id)
-        res.status(202).json(teacher)
-    } catch (error) {
-        return next(error)
-    }
+    const teacher = await deleteTeacherService(id)
+    res.status(StatusCodes.OK).json(teacher)
 }

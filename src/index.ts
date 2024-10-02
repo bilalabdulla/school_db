@@ -10,6 +10,7 @@ import { subjects } from '../seeders/subjects'
 import { subjectEnrollments } from '../seeders/subjectenrollments'
 import { subjectTeachers } from '../seeders/subjectteachers'
 import cookieParser from 'cookie-parser'
+import 'express-async-errors'
 
 import studentsRouter from '../routes/students'
 import teachersRouter from '../routes/teachers'
@@ -21,9 +22,28 @@ import authRouter from '../routes/auth'
 import departmentsRouter from '../routes/departments'
 import { validateToken } from './JWT'
 import { departments } from '../seeders/departments'
+import errorHandlerMiddleware from '../middlewares/error-handler'
+
+const whitelist = [
+    'http://localhost:5017',
+    'https://yourprod.ip.address.com',
+    'http://<your local IP>:<port>'
+]
+
+const corsOptions = {
+    credentials: true,
+    origin: (origin: any, callback: any) => {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error(" not allowed by CORS" + origin))
+        }
+    },
+    optionsSuccessStatus: 200
+}
 
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 
 app.use('/api/v1/students', studentsRouter)
@@ -33,7 +53,9 @@ app.use('/api/v1/subjectenrollments', validateToken, subjectEnrollmentsRouter)
 app.use('/api/v1/subjectteachers', validateToken, subjectTeachersRouter)
 app.use('/api/v1/classes', validateToken, classesRouter)
 app.use('/api/v1/departments', validateToken, departmentsRouter)
-app.use('/api/v1/auth', authRouter)  
+app.use('/api/v1/auth', authRouter) 
+
+app.use(errorHandlerMiddleware)
 
 // const createStudents = () => {
 //     students.map((student) => {
